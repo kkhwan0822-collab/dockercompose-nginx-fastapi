@@ -43,7 +43,7 @@ jobs:
 
           docker build -t $ECR_REGISTRY/${{ secrets.ECR_REPO_FASTAPI }}:$IMAGE_TAG ./app
           docker build -t $ECR_REGISTRY/${{ secrets.ECR_REPO_FASTAPI}}:latest ./app
-          
+
           docker push $ECR_REGISTRY/${{ secrets.ECR_REPO_NGINX }}:$IMAGE_TAG
           docker push $ECR_REGISTRY/${{ secrets.ECR_REPO_NGINX }}:$latest
 
@@ -68,12 +68,10 @@ jobs:
               "aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/docker-compose.yaml /home/ec2-user/nginx/docker-compose.yaml",
               
               "aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | sudo docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}",
-              
               "export ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}",
               "export ECR_REPO_NGINX=${{ secrets.ECR_REPO_NGINX }}",
               "export ECR_REPO_FASTAPI=${{ secrets.ECR_REPO_FASTAPI }}",
               "export IMAGE_TAG=${{ github.sha }}",
-              
               "cd /home/ec2-user/nginx",
               "docker compose pull",
               "docker compose up -d --remove-orphans",
@@ -81,4 +79,3 @@ jobs:
               "rm -f /home/ec2-user/nginx/Dockerfile",
               "docker image prune -f"
             ]'
-
