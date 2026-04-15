@@ -52,8 +52,7 @@ jobs:
 
       # AWS SSM을 통해 EC2 인스턴스에서 수행할 내용 정의
       - name: Deploy to EC2 using SSM
-        run: |
-          IMAE_URL="${{steps.login-ecr.outputs.registry}}/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}"        
+        run: |       
           aws ssm send-command \
             --document-name "AWS-RunShellScript" \
             --targets "Key=tag:${{secrets.ASG_TAG_KEY}}, Values=${{secrets.ASG_TAG_VALUE}}" \
